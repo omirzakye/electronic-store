@@ -1,0 +1,12 @@
+{%extends "store/layout.html" %}
+{%block content%}
+    <center><h2>Department Detail Page</h2></center>
+    <h3>Department of {{dep.dep_name}}
+        <ol>
+            {% for it in items %}
+            <li><h3><a href="{% url 'store:get_item_by_id' it.id%}">{{it.item_name}}, {{it.item_desc}}. Cost: {{it.item_cost}} Tenge</a></h3></li>
+            {% endfor %}
+        </ol>
+    </h3>
+    <a href="{% url 'store:departments' %}">Go Back</a>
+{% endblock %}

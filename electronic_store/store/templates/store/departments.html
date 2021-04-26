@@ -1,0 +1,13 @@
+{%extends "store/layout.html" %}
+{%block content%}
+    <center><h2>These are the departments! Welcome!</h2></center>
+    {% if all_deps %}
+    <ul>
+        {% for dep in all_deps %}
+        <li><h3><a href="{% url 'store:get_dep_by_id' dep.id %}">{{dep.dep_name}}</a></h3></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <h2>NO departments yet!</h2>
+    {% endif %}
+{% endblock %}

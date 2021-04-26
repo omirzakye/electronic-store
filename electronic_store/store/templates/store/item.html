@@ -1,0 +1,13 @@
+{%extends "store/layout.html" %}
+{%block content%}
+    <center><h2>Item Detail Page</h2></center>
+    <h3>Item ID#: {{item.id}}
+    <br>
+        Item Name: {{item.item_name}}
+    <br>
+        Details: {{item.item_desc}}
+    <br>
+        Cost: {{item.item_cost}}
+    </h3>
+    <a href="{% url 'store:index' %}">Go Back</a>
+{% endblock %}

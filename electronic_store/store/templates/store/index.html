@@ -1,0 +1,13 @@
+{%extends "store/layout.html" %}
+{%block content%}
+    <center><h2>This is main page! Welcome!</h2></center>
+    {% if latest_items %}
+    <ul>
+        {% for it in latest_items %}
+        <li><h3><a href="{% url 'store:get_item_by_id' it.id%}"> This is item with ID {{it.id}}</a></h3></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <h2>NO items yet!</h2>
+    {% endif %}
+{% endblock %}
