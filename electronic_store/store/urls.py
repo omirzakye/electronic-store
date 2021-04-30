@@ -10,5 +10,8 @@ urlpatterns = [
     path('departments/', departments, name="departments"),
     path('department/<int:id>', get_dep_by_id, name="get_dep_by_id"),
     path('search/', search_item_by_name, name='search_item_by_name'),
-    path('search/<str:text>/', search_success, name='search_success')
+    path('search/<str:text>/', search_success, name='search_success'),
+    path('login/', loginUser, name="login"),
+    path('register/', registerView.as_view(), name="registration"),
+    path('logout/', logoutUser, name="logout")
 ]

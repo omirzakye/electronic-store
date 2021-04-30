@@ -1,7 +1,11 @@
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
+from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
+from .forms import *
 from .models import *
 
 
@@ -60,3 +64,33 @@ def get_dep_by_id(request, id):
     items = list(Item.objects.filter(dep_id=dep.id))
     return render(request, "store/department.html", {"dep": dep, "items": items})
 
+
+def loginUser(request):
+    if request.user.is_authenticated:
+        return redirect('store:index')
+    else:
+        if request.method == 'POST':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                return redirect('store:index')
+            else:
+                messages.info(request, 'Username OR password is incorrect')
+
+        context = {}
+        return render(request, 'registration/login.html', context)
+
+
+def logoutUser(request):
+    logout(request)
+    return redirect('store:login')
+
+
+class registerView(CreateView):
+    form_class = MyUserForm
+    # success_url = reverse_lazy('login')
+    template_name = 'registration/register.html'
