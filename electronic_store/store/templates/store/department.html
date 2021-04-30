@@ -1,6 +1,7 @@
 {%extends "store/layout.html" %}
 {%block content%}
     <center><h2>Department Detail Page</h2></center>
+    {% if dep %}
     <h3>Department of {{dep.dep_name}}
         <ol>
             {% for it in items %}
@@ -8,5 +9,8 @@
             {% endfor %}
         </ol>
     </h3>
+    {% else %}
+        <h2>This department has not been added yet</h2>
+    {% endif %}
     <a href="{% url 'store:departments' %}">Go Back</a>
 {% endblock %}

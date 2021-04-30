@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
+from django.views.generic import CreateView
+
 from .models import *
 
 
@@ -57,3 +59,4 @@ def get_dep_by_id(request, id):
     dep = get_object_or_404(Department, pk=id)
     items = list(Item.objects.filter(dep_id=dep.id))
     return render(request, "store/department.html", {"dep": dep, "items": items})
+

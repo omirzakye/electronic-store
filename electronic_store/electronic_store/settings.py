@@ -68,6 +68,8 @@ TEMPLATES = [
     },
 ]
 
+AUTH_USER_MODEL = 'store.Account'
+
 WSGI_APPLICATION = 'electronic_store.wsgi.application'
 
 
