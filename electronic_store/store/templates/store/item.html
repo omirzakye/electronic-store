@@ -8,6 +8,10 @@
         Details: {{item.item_desc}}
     <br>
         Cost: {{item.item_cost}}
+    <br>
+        <img src="{{item.item_image}}">
+    <br>
+
     </h3>
     <a href="{% url 'store:index' %}">Go Back</a>
 {% endblock %}

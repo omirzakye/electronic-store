@@ -3,13 +3,25 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView, TemplateView
 
 from .forms import *
 from .models import *
 
 
 # Create your views here.
+
+class IndexView(ListView):
+    template_name = "store/index.html"
+    context_object_name = "latest_items"
+
+    def get_queryset(self):
+        return Item.objects.order_by('item_cost')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['popular_items'] = Item.objects.filter(num_of_views__gt=5)[:4]
+        return context
 
 def index(request):
     # return HttpResponse("<center><h2>Welcome page!</h2></center>")
@@ -69,7 +81,7 @@ def loginUser(request):
     if request.user.is_authenticated:
         return redirect('store:index')
     else:
-        if request.method == 'POST':
+        #if request.method == 'POST':
             username = request.POST.get('username')
             password = request.POST.get('password')
 
@@ -81,8 +93,8 @@ def loginUser(request):
             else:
                 messages.info(request, 'Username OR password is incorrect')
 
-        context = {}
-        return render(request, 'registration/login.html', context)
+            context = {}
+            return render(request, 'registration/login.html', context)
 
 
 def logoutUser(request):
@@ -90,7 +102,11 @@ def logoutUser(request):
     return redirect('store:login')
 
 
+class ProfileView(TemplateView):
+    template_name = "registration/user_page.html"
+
+
 class registerView(CreateView):
     form_class = MyUserForm
-    # success_url = reverse_lazy('login')
+    success_url = reverse_lazy('store:login')
     template_name = 'registration/register.html'
