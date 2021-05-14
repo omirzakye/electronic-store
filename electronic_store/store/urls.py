@@ -15,4 +15,8 @@ urlpatterns = [
     path('login/', loginUser, name="login"),
     path('register/', registerView.as_view(), name="registration"),
     path('logout/', logoutUser, name="logout"),
+    path('cart/', cart, name="cart"),
+    path('checkout/', checkout, name="checkout"),
+    path('update_item/', updateItem, name="update_item"),
+    path('process_order/', processOrder, name="process_order"),
 ]

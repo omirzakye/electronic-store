@@ -9,9 +9,11 @@
     <br>
         Cost: {{item.item_cost}}
     <br>
-        <img src="{{item.item_image}}">
+        <img src="{{item.imageURL}}" class="row-image" >
     <br>
-
+        <button class="btn btn-outline-secondary add-btn update-cart" data-product='{{item.id}}' data-action='add' >Add to Cart nw</button>
+        <button class="btn btn-outline-secondary add-btn" onclick="addToCart('{{item.id}}', 'add')">Add to Cart w</button>
+<!-- -->
     </h3>
     <a href="{% url 'store:index' %}">Go Back</a>
 {% endblock %}
