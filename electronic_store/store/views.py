@@ -8,12 +8,15 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, ListView, TemplateView
-
+from geopy.geocoders import Nominatim
+from geopy.distance import geodesic
 from .forms import *
 from .models import *
-
+from .utils import *
+import folium
 
 # Create your views here.
+
 
 class IndexView(ListView):
     template_name = "store/index.html"
@@ -197,3 +200,106 @@ def processOrder(request):
                 zipcode=data['shipping']['zipcode'],
             )
     return JsonResponse('Payment completed', safe=False)
+
+
+def calculate_distance_view(request):
+    distance = None
+    obj = get_object_or_404(FindLocation, id=22)
+    form = FindLocationModelForm(request.POST or None)
+    geolocator = Nominatim(user_agent='store')
+
+    ips = [
+        '217.196.24.37',
+        '88.204.154.155',
+        '188.0.129.134',
+        '5.34.115.95'
+    ]
+    info = []
+    for ip in ips:
+        country, city, lat, long = get_geo(ip)
+        info.append([country, city, lat, long])
+
+    # city names
+    locations = []
+    for i in info:
+        locations.append(geolocator.geocode(i[1]))
+
+    points = []
+    for i in info:
+        points.append((i[2], i[3]))
+
+    # initial folium map
+    m = folium.Map(width=1125, height=700, location=get_center_coordinates(info[2][2], info[2][3], info[1][2], info[1][3]), zoom_start=5)
+
+    # location markers
+    folium.Marker([info[0][2], info[0][3]], tooltip='Nur-Sultan, Seifullin Street', popup=info[0][1]['city'],
+                  icon=folium.Icon(color='purple')).add_to(m)
+    folium.Marker([info[1][2], info[1][3]], tooltip='Almaty, Tole Bi Avenue', popup=info[1][1]['city'],
+                  icon=folium.Icon(color='purple')).add_to(m)
+    folium.Marker([info[2][2], info[2][3]], tooltip='Aktau, 16th Microdistrict', popup=info[2][1]['city'],
+                  icon=folium.Icon(color='purple')).add_to(m)
+    folium.Marker([info[3][2], info[3][3]], tooltip='Oral', popup=info[3][1]['city'],
+                  icon=folium.Icon(color='purple')).add_to(m)
+
+    if form.is_valid():
+        instance = form.save(commit=False)
+        deliveryAddress_ = form.cleaned_data.get('deliveryAddress')
+        deliveryAddress = geolocator.geocode(deliveryAddress_)
+
+        # coordinates of delivery address
+        d_lat = deliveryAddress.latitude
+        d_long = deliveryAddress.longitude
+        pointB = (d_lat, d_long)
+
+        # calculating distances
+        distances = []
+        for p in points:
+            distances.append(round(geodesic(p, pointB).km, 2))
+
+        distance = min(distances)
+
+        id = 0
+        for d in distances:
+            if distance == d:
+                break
+            else:
+                id = id + 1
+
+        # distance = round(geodesic(pointA, pointB).km, 2)
+
+        m = folium.Map(width=1100, height=700, location=get_center_coordinates(info[2][2], info[2][3], info[1][2], info[1][3]),
+                       zoom_start=get_zoom(distance))
+
+        # location markers
+        folium.Marker([info[0][2], info[0][3]], tooltip='Nur-Sultan', popup=info[0][1]['city'],
+                      icon=folium.Icon(color='purple')).add_to(m)
+        folium.Marker([info[1][2], info[1][3]], tooltip='Almaty', popup=info[1][1]['city'],
+                      icon=folium.Icon(color='purple')).add_to(m)
+        folium.Marker([info[2][2], info[2][3]], tooltip='Aktau', popup=info[2][1]['city'],
+                      icon=folium.Icon(color='purple')).add_to(m)
+        folium.Marker([info[3][2], info[3][3]], tooltip='Oral', popup=info[3][1]['city'],
+                      icon=folium.Icon(color='purple')).add_to(m)
+
+        # delivery address marker
+        folium.Marker([d_lat, d_long], tooltip='click here for more', popup=deliveryAddress,
+                      icon=folium.Icon(color='cloud')).add_to(m)
+
+        # folium.Marker([l_lat, l_long], tooltip='click here for more', popup=city['city'],
+        #               icon=folium.Icon(color='purple')).add_to(m)
+
+        line = folium.PolyLine(locations=[points[id], pointB], weight=3, color='blue')
+        m.add_child(line)
+
+        instance.location = info[id][1]['city']
+        instance.distance = distance
+        instance.save()
+
+    m = m._repr_html_()
+
+    context = {
+        'distance': distance,
+        'form': form,
+        'map': m,
+    }
+
+    return render(request, 'store/map.html', context)

@@ -141,3 +141,14 @@ class ShippingAddress(models.Model):
 
     def __str__(self):
         return self.address
+
+
+class FindLocation(models.Model):
+    location = models.CharField(max_length=200)
+    deliveryAddress = models.CharField(max_length=200)
+    distance = models.DecimalField(max_digits=10, decimal_places=2)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Our nearest shop {self.location} is {self.distance}km away from you {self.deliveryAddress}."
+
