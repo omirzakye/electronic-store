@@ -45,7 +45,6 @@
             <div class="box-element hidden" id="payment-info">
 				<small>Paypal Options</small>
 				<button id="make-payment" onclick="submitFormData()">Make payment</button>
-				<div id="paypal-button-container"></div>
 			</div>
 
         </div>
@@ -149,7 +148,7 @@
 	    	.then((response) => response.json())
 	    	.then((data) => {
 				console.log('Success:', data);
-				alert('Transaction completed');
+				alert('Thanks for your purchase');
 
 				cart = {}
 				document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
