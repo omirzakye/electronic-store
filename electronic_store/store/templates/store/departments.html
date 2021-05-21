@@ -4,7 +4,13 @@
     {% if all_deps %}
     <ul>
         {% for dep in all_deps %}
-        <li><h3><a href="{% url 'store:get_dep_by_id' dep.id %}">{{dep.dep_name}}</a></h3></li>
+        <div class="col-lg-4" style="margin-top: 1%">
+                <img class="thumbnail" src="{{dep.imageURL}}">
+                    <div class="box-element product">
+                        <h6><strong><a href="{% url 'store:get_dep_by_id' dep.id%}">{{dep.dep_name}}</a></strong></h6>
+
+                    </div>
+            </div>
         {% endfor %}
     </ul>
     {% else %}

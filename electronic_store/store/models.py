@@ -59,9 +59,18 @@ class Account(AbstractBaseUser):
 
 class Department(models.Model):
     dep_name = models.CharField(max_length=255)
+    item_image = models.ImageField(null=True, blank=True)
 
     def __str__(self):
         return self.dep_name
+
+    @property
+    def imageURL(self):
+        try:
+            url = self.item_image.url
+        except:
+            url = ''
+        return url
 
 
 class Item(models.Model):

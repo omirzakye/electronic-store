@@ -1,11 +1,11 @@
 {%extends "store/layout.html" %}
-{% load static %}
 {%block content%}
     <center><h2 style="font-family: 'Comic Sans MS'; margin-top: 3%">Welcome to our Electronic Store!</h2></center>
-    {% if all_items %}
+    <h2><br>The highest rated items are:</h2>
+    {% if latest_items %}
     <div class="row" style="padding-left: 4%; padding-right: 4%">
-        {% for it in all_items %}
-        <div class="col-lg-2" style="margin-top: 1%">
+        {% for it in latest_items %}
+        <div class="col-lg-3" style="margin-top: 1%">
             <img class="thumbnail" src="{{it.imageURL}}">
             <div class="box-element product">
                 <h6><strong><a href="{% url 'store:get_item_by_id' it.id%}">{{it.item_name}}</a></strong></h6>

@@ -3,12 +3,12 @@
 {% block content %}
 {%if user %}
 <br>
-<p>Name: {{user.username}}</p>
-<p>Email: {{user.email}}</p>
-<p>Password: {{user.password}}</p>
-<a href="{% url 'store:cart' %}">My cart</a>
-<p><a href="#">Change User Info</a></p>
-{%else%}
-<p>{{user}}</p>
+<div class="profile">
+    <p>Name: {{user.username}}</p>
+    <p>Email: {{user.email}}</p>
+    <a href="{% url 'store:cart' %}">My cart</a>
+    {%else%}
+    <p>{{user}}</p>
+</div>
 {% endif %}
 {% endblock %}

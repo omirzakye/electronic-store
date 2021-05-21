@@ -19,22 +19,21 @@ import folium
 
 
 class IndexView(ListView):
-    template_name = "store/index.html"
+    template_name = "store/e-store.html"
     context_object_name = "latest_items"
 
     def get_queryset(self):
-        return Item.objects.order_by('item_cost')
+        return Item.objects.order_by('-item_rate')[:4]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['popular_items'] = Item.objects.filter(num_of_views__gt=5)[:4]
+        context['popular_items'] = Item.objects.filter(item_rate__gt=5).order_by('item_rate')[:3]
         return context
 
 
-def index(request):
-    # return HttpResponse("<center><h2>Welcome page!</h2></center>")
-    latest_items = Item.objects.order_by('-item_cost')
-    return render(request, "store/index.html", {"latest_items": latest_items})
+def home(request):
+    all_items = Item.objects.order_by('-item_cost')
+    return render(request, "store/index.html", {"all_items": all_items})
 
 
 def get_item_by_id(request, id):
@@ -72,6 +71,23 @@ def item_catalog(request):
             return HttpResponse(f"Results are:<br> {items}")
     except Exception as e:
         raise Http404(f"Oops! Error! {e}")
+
+
+def rate_item(request, id):
+    if request.method == 'POST':
+        if request.POST.get("rate_val"):
+            print(type(request.POST.get("rate_val")))
+            it_obj = Item.objects.get(pk=id)
+            if it_obj.item_rate == 0.0:
+                it_obj.item_rate = float(request.POST.get("rate_val"))
+                it_obj.save()
+            else:
+                it_obj.rating = (it_obj.item_rate+float(request.POST.get("rate_val")))/2
+                it_obj.save()
+            return redirect("store:get_item_by_id", id)
+        else:
+            return render(request, "store/search.html",
+                        {"empty_res": "There is no item"})
 
 
 def departments(request):

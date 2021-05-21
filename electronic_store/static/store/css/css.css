@@ -1,5 +1,10 @@
 body{
 	background-color: hsl(0, 0%, 98%);
+	background-color: #ffeecc;
+}
+
+.row{
+    margin-right: 0px;
 }
 
 h1,h2,h3,h4,h5,h6{
@@ -23,6 +28,7 @@ h1,h2,h3,h4,h5,h6{
 
 .product{
 	border-radius: 0 0 4px 4px;
+	margin-top: -5%;
 }
 
 .bg-dark{
@@ -52,6 +58,11 @@ h1,h2,h3,h4,h5,h6{
 
 .btn{
 	border-radius: 0;
+	background-color: orange;
+	color: black;
+	font-family: "Comic Sans MS";
+	border-radius: 8px;
+	font-weight: bold;
 }
 
 .row-image{
@@ -95,4 +106,22 @@ h1,h2,h3,h4,h5,h6{
 
 .hidden{
 	display: none!important;
+}
+
+.tab{
+	margin: 2%;
+	margin-left: 15%;
+	color: #4f868c;
+}
+
+.tab td{
+	color: #ffffff;
+}
+
+.profile{
+	color: black;
+	font-weight: bold;
+	margin-left: 10%;
+	margin-top: 5%;
+	font-size: 300%;
 }

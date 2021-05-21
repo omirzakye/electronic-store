@@ -1,16 +1,24 @@
 {%extends "store/layout.html" %}
 {%block content%}
-    <center><h2>Department Detail Page</h2></center>
+    <center><h2>Department of {{dep.dep_name}}</h2></center>
     {% if dep %}
-    <h3>Department of {{dep.dep_name}}
-        <ol>
+    <div class="row">
+        <div class="col-lg-12">
             {% for it in items %}
-            <li><h3><a href="{% url 'store:get_item_by_id' it.id%}">{{it.item_name}}, {{it.item_desc}}. Cost: {{it.item_cost}} Tenge</a></h3></li>
+            <div class="col-lg-2" style="margin-top: 1%">
+                <img class="thumbnail" src="{{it.imageURL}}">
+                    <div class="box-element product">
+                        <h6><strong><a href="{% url 'store:get_item_by_id' it.id%}">{{it.item_name}}</a></strong></h6>
+                        <hr>
+                        <button class="btn btn-outline-secondary add-btn" onclick="addToCart('{{it.id}}', 'add')">Add</button>
+                        <h4 style="display: inline-block; float: right"><strong>${{it.item_cost}}</strong></h4>
+                    </div>
+            </div>
             {% endfor %}
-        </ol>
-    </h3>
+        </div>
+    </div>
     {% else %}
         <h2>This department has not been added yet</h2>
     {% endif %}
-    <a href="{% url 'store:departments' %}">Go Back</a>
+    <a href="{% url 'store:departments' %}" style="color: black; font-family:'Arial'">Go Back</a>
 {% endblock %}

@@ -1,19 +1,31 @@
 {%extends "store/layout.html" %}
 {%block content%}
     <center><h2>Item Detail Page</h2></center>
-    <h3>Item ID#: {{item.id}}
-    <br>
-        Item Name: {{item.item_name}}
-    <br>
-        Details: {{item.item_desc}}
-    <br>
-        Cost: {{item.item_cost}}
-    <br>
-        <img src="{{item.imageURL}}" class="row-image" >
-    <br>
-        <button class="btn btn-outline-secondary add-btn update-cart" data-product='{{item.id}}' data-action='add' >Add to Cart nw</button>
-        <button class="btn btn-outline-secondary add-btn" onclick="addToCart('{{item.id}}', 'add')">Add to Cart w</button>
-<!-- -->
-    </h3>
-    <a href="{% url 'store:index' %}">Go Back</a>
+<a href="{% url 'store:index' %}" style="color: black; font-family:'Arial'">Go Back</a>
+    <table class="tab">
+        <tr>
+            <td>
+                <img src="{{item.imageURL}}" width="70%">
+            </td>
+
+            <td>
+                <h2>Item ID#: {{item.id}}</h2>
+                <h2>Item Name: {{item.item_name}}</h2>
+                <h2>Details: {{item.item_desc}}</h2>
+                <h2>Cost: ${{item.item_cost}}</h2>
+                {%if user.is_authenticated%}
+                <h3>Rate item from 1 to 5:</h3>
+                  <form class="" action="{% url 'store:rate_item' item.id %}" method="post">
+                    {% csrf_token %}
+                    {% for i in '12345'|make_list %}
+                      <input type="radio" name="rate_val" value="{{forloop.counter}}">
+                    {%endfor%}
+                      <input type="submit" name="" value="Rate" class="btn">
+                  </form>
+                {% endif %}
+                <br>
+                <button class="btn btn-outline-secondary add-btn" onclick="addToCart('{{item.id}}', 'add')">Add to Cart</button>
+            </td>
+        </tr>
+    </table>
 {% endblock %}

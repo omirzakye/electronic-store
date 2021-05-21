@@ -7,7 +7,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'store/css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'store/css/css.css' %}">
     <script type="text/javascript">
         var user = '{{request.user}}'
 
@@ -68,13 +68,13 @@
 
                     <div class="navbar-header">
                         <button class="navbar-toggle" data-target="#mobile_menu" data-toggle="collapse"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-                        <a href="#" class="navbar-brand">E-Store</a>
+                        <a href="{% url 'store:e-store' %}" class="navbar-brand" style="color: orange">E-Store</a>
                     </div>
 
                     <div class="navbar-collapse collapse" id="mobile_menu">
                         <ul class="nav navbar-nav">
-                            <li class="active"><a href="{% url 'store:index'%}">Home</a></li>
-                            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">Departments <span class="caret"></span></a>
+                            <li ><a href="{% url 'store:index'%}" style="font-weight: bold">Home</a></li>
+                            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">Departments <span class="caret" style="color: orange"></span></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="{% url 'store:get_dep_by_id' 1 %}">Telephones & Tablets</a></li>
                                     <li><a href="{% url 'store:get_dep_by_id' 2 %}">Cameras & Photography</a></li>
@@ -84,6 +84,7 @@
                                     <li><a href="{% url 'store:departments' %}">All departments</a></li>
                                 </ul>
                             </li>
+                            <li><a href="{% url 'store:map' %}">Map</a></li>
                             <li><a href="#">Contact Us</a></li>
                         </ul>
                         <ul class="nav navbar-nav">
@@ -93,7 +94,7 @@
                                     <div class="form-group">
                                         <div class="input-group">
                                             <input type="search" name="search_field" id="" placeholder="Search Anything Here..." class="form-control">
-                                            <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+                                            <span class="input-group-addon"><span class="glyphicon glyphicon-search" style="color: orange"></span></span>
                                         </div>
                                     </div>
                                 </form>
@@ -106,8 +107,8 @@
                                   <a href="{% url 'store:logout' %}"> Logout </a>
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
-                                <li><a href="{% url 'store:user_page' user.id%}"><span class="glyphicon glyphicon-user"></span>  {{user.username}}</a></li>
-                                <li><a href="{% url 'store:cart' %}"><img  id="cart-icon" src="{% static 'store/images/cart.png' %}"></a> </li>
+                                <li><a href="{% url 'store:user_page' user.id%}"><span class="glyphicon glyphicon-user" style="color: orange"></span>  {{user.username}}</a></li>
+                                <li><a href="{% url 'store:cart' %}"><img  id="cart-icon" src="{% static 'store/images/cart.png' %}" style="background:orange; padding: 4%; border-radius: 6px"></a> </li>
 <!--                                <li><p id="cart-total">3</p> </li>-->
                             </ul>
                             {%else%}

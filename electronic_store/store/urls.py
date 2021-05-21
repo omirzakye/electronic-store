@@ -3,8 +3,10 @@ from .views import *
 
 app_name = "store"
 urlpatterns = [
-    path('', IndexView.as_view(), name="index"),
+    path('e-store/', IndexView.as_view(), name="e-store"),
+    path('', home, name="index"),
     path('item/<int:id>', get_item_by_id, name="get_item_by_id"),
+    path('item/<int:id>/rate', rate_item, name='rate_item'),
     path('search/<str:text>', search_item_by_name, name="search_item_by_name"),
     path('catalog/', item_catalog, name="item_catalog"),
     path('departments/', departments, name="departments"),

@@ -2,19 +2,20 @@
 
 {% block content %}
   {% if search_res %}
+<a href="{% url 'store:index' %}" style="color: black">Go Back</a>
   <br>
-    {% for item in search_res%}
-      <ol>
-        <li value="{{forloop.counter}}">
-          <a href="{% url 'store:get_item_by_id' item.id %}">
-          <p>{{item.item_name}} - {{item.item_cost}} Tenge</p>
-        </a>
-        {{item.item_desc|truncatewords:50}}
-        </li>
-      </ol>
+    {% for it in search_res%}
+      <div class="col-lg-2" style="margin-top: 1%">
+          <img class="thumbnail" src="{{it.imageURL}}">
+              <div class="box-element product">
+                  <h6><strong><a href="{% url 'store:get_item_by_id' it.id%}">{{it.item_name}}</a></strong></h6>
+                  <hr>
+                  <button class="btn btn-outline-secondary add-btn" onclick="addToCart('{{it.id}}', 'add')">Add</button>
+                  <h4 style="display: inline-block; float: right"><strong>${{it.item_cost}}</strong></h4>
+              </div>
+      </div>
       {%endfor%}
     {% else %}
       {{empty_res}}
     {% endif %}
-    <a href="{% url 'store:index' %}">Go Back</a>
 {% endblock%}
