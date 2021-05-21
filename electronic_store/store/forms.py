@@ -13,3 +13,9 @@ class MyUserChangeForm(UserChangeForm):
     class Meta(UserChangeForm.Meta):
         model = Account
         fields = ('email', 'username')
+
+
+class FindLocationModelForm(forms.ModelForm):
+    class Meta:
+        model = FindLocation
+        fields = ('deliveryAddress',)
