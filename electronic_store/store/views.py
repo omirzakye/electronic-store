@@ -105,17 +105,17 @@ def loginUser(request):
     if request.user.is_authenticated:
         return redirect('store:index')
     else:
-        # if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        if request.method == 'POST':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
 
-        user = authenticate(request, username=username, password=password)
+            user = authenticate(request, username=username, password=password)
 
-        if user is not None:
-            login(request, user)
-            return redirect('store:index')
-        else:
-            messages.info(request, 'Username OR password is incorrect')
+            if user is not None:
+                login(request, user)
+                return redirect('store:index')
+            else:
+                messages.info(request, 'Username OR password is incorrect')
 
         context = {}
         return render(request, 'registration/login.html', context)
@@ -319,3 +319,8 @@ def calculate_distance_view(request):
     }
 
     return render(request, 'store/map.html', context)
+
+
+def contactus(request):
+    context = {}
+    return render(request, 'store/contactus.html', context)
