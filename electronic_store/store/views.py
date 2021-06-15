@@ -66,16 +66,16 @@ def search_success(request, text):
         return render(request, "store/search.html", {"search_res": search_res, "empty_res": "No results found"})
 
 
-def item_catalog(request):
-    try:
-        all_items = Item.objects.all()
-        items = ""
-        for it in all_items:
-            items += f"<h3>Item ID # {it.id} - {it.item_name}" \
-                     f" - {it.item_cost}</h3><br>"
-            return HttpResponse(f"Results are:<br> {items}")
-    except Exception as e:
-        raise Http404(f"Oops! Error! {e}")
+# def item_catalog(request):
+#     try:
+#         all_items = Item.objects.all()
+#         items = ""
+#         for it in all_items:
+#             items += f"<h3>Item ID # {it.id} - {it.item_name}" \
+#                      f" - {it.item_cost}</h3><br>"
+#             return HttpResponse(f"Results are:<br> {items}")
+#     except Exception as e:
+#         raise Http404(f"Oops! Error! {e}")
 
 
 def rate_item(request, id):
@@ -139,6 +139,43 @@ class registerView(CreateView):
     form_class = MyUserForm
     success_url = reverse_lazy('store:login')
     template_name = 'registration/register.html'
+
+
+def wishlist(request):
+    if request.user.is_authenticated:
+        customer = request.user
+        wishlist, created = Wishlist.objects.get_or_create(customer=customer)
+        items = wishlist.wishlistitem_set.all()
+    else:
+        items = []
+
+    context = {'items': items}
+    return render(request, 'registration/user_page.html', context)
+
+
+def updateWishlist(request):
+    data = json.loads(request.body)
+    productId = data['productId']
+    action = data['action']
+    print('Action:', action)
+    print('Product:', productId)
+
+    customer = request.user
+    product = Item.objects.get(id=productId)
+
+    wishlist, created = Wishlist.objects.get_or_create(customer=customer)
+
+    wishlistItem, created = WishlistItem.objects.get_or_create(wishlist=wishlist, product=product)
+
+    if action == 'add':
+        pass
+
+    wishlistItem.save()
+
+    if action == 'remove':
+        wishlistItem.delete()
+
+    return JsonResponse('Item was added', safe=False)
 
 
 def cart(request):

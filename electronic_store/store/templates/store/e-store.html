@@ -1,4 +1,5 @@
 {%extends "store/layout.html" %}
+{% load static %}
 {%block content%}
     <center><h2 style="font-family: 'Comic Sans MS'; margin-top: 3%">Welcome to our Electronic Store!</h2></center>
     <h2><br>The highest rated items are:</h2>
@@ -11,6 +12,7 @@
                 <h6><strong><a href="{% url 'store:get_item_by_id' it.id%}">{{it.item_name}}</a></strong></h6>
                 <hr>
                 <button class="btn btn-outline-secondary add-btn" onclick="addToCart('{{it.id}}', 'add')">Add</button>
+                <button class="btn btn-outline-secondary add-btn" onclick="wishList('{{it.id}}', 'add')"><img src="{% static 'store/images/wish.png' %}" width="20px"></button>
                 <h4 style="display: inline-block; float: right"><strong>${{it.item_cost}}</strong></h4>
             </div>
         </div>

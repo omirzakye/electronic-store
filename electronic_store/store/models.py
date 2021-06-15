@@ -155,6 +155,14 @@ class ShippingAddress(models.Model):
         return self.address
 
 
+class Wishlist(models.Model):
+    customer = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, blank=True)
+
+class WishlistItem(models.Model):
+    product = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True)
+    wishlist = models.ForeignKey(Wishlist, on_delete=models.SET_NULL, null=True)
+
+
 class FindLocation(models.Model):
     location = models.CharField(max_length=200)
     deliveryAddress = models.CharField(max_length=200)

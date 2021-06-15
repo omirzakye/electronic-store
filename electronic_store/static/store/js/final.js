@@ -14,6 +14,40 @@ for (var i = 0; i < updateBtns.length; i++) {
 	})
 }
 
+function wishList(item, action){
+	var itemId = item;
+	var action = action;
+	console.log('itemId:', itemId, 'Action:', action)
+	console.log('USER', user)
+	if (user === 'AnonymousUser'){
+		console.log('Not logged in')
+		//addCookieItem(itemId, action)
+	}else
+		updateUserWishlist(itemId, action)
+}
+
+function updateUserWishlist(itemId, action){
+	console.log('User is authenticated, sending data...')
+
+		var url = '/update_wishlist/'
+
+		fetch(url, {
+			method:'POST',
+			headers:{
+				'Content-Type':'application/json',
+				'X-CSRFToken':csrftoken,
+			},
+			body:JSON.stringify({'productId': itemId, 'action':action})
+		})
+		.then((response) => {
+		   return response.json();
+		})
+		.then((data) => {
+		    console.log('data', data)
+			location.reload()
+		})
+}
+
 function addToCart(item, action){
     var itemId = item;
 	var action = action;
@@ -27,7 +61,7 @@ function addToCart(item, action){
 }
 
 function updateUserOrder(itemId, action){
-	console.log('User is authenticated, sending data...')
+	console.log('User is authenticated for cart, sending data...')
 
 		var url = '/update_item/'
 

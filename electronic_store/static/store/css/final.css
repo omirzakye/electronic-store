@@ -104,6 +104,10 @@ h1,h2,h3,h4,h5,h6{
 	opacity: .6;
 }
 
+.imagebut{
+	width:30px;
+}
+
 .hidden{
 	display: none!important;
 }
@@ -121,7 +125,4 @@ h1,h2,h3,h4,h5,h6{
 .profile{
 	color: black;
 	font-weight: bold;
-	margin-left: 10%;
-	margin-top: 5%;
-	font-size: 300%;
 }
