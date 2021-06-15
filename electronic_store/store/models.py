@@ -95,6 +95,9 @@ class Item(models.Model):
             url = ''
         return url
 
+    def get_numberOfViews(self):
+        return self.num_of_views
+
 
 class Order(models.Model):
     customer = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, blank=True)

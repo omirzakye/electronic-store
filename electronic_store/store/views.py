@@ -7,7 +7,7 @@ from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import CreateView, ListView, TemplateView
+from django.views.generic import CreateView, ListView, TemplateView, DetailView
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 from .forms import *
@@ -20,14 +20,12 @@ import folium
 
 class IndexView(ListView):
     template_name = "store/e-store.html"
-    context_object_name = "latest_items"
-
-    def get_queryset(self):
-        return Item.objects.order_by('-item_rate')[:4]
+    context_object_name = "high_rated_items"
+    queryset = Item.objects.order_by('-item_rate')[:4]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['popular_items'] = Item.objects.filter(item_rate__gt=5).order_by('item_rate')[:3]
+        context['popular_items'] = Item.objects.filter(num_of_views__gt=0).order_by('-num_of_views')[:4]
         return context
 
 
@@ -36,14 +34,21 @@ def home(request):
     return render(request, "store/index.html", {"all_items": all_items})
 
 
-def get_item_by_id(request, id):
-    item = get_object_or_404(Item, pk=id)
-    return render(request, "store/item.html", {"item": item})
-    # try:
-    #     item = Item.objects.get(pk=id)
-    #     return HttpResponse(f"<h3>{item.item_name} {item.item_desc}. Cost: {item.item_cost} tenge.</h3>")
-    # except Exception as e:
-    #     raise Http404(f"Oops! Error! {e}")
+# def get_item_by_id(request, id):
+#     item = get_object_or_404(Item, pk=id)
+#     return render(request, "store/item.html", {"item": item})
+
+
+class GetArtByID(DetailView):
+    model = Item
+    template_name = "store/item.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        item_obj = self.get_object()
+        item_obj.num_of_views += 1
+        item_obj.save()
+        return context
 
 
 def search_item_by_name(request):
@@ -171,6 +176,7 @@ def updateItem(request):
 
     customer = request.user
     product = Item.objects.get(id=productId)
+
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
 
     orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)

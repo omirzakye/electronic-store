@@ -13,6 +13,7 @@
                 <h2>Item Name: {{item.item_name}}</h2>
                 <h2>Details: {{item.item_desc}}</h2>
                 <h2>Cost: ${{item.item_cost}}</h2>
+                <h2>Number of views: {{item.num_of_views}}</h2>
                 {%if user.is_authenticated%}
                 <h3>Rate item from 1 to 5:</h3>
                   <form class="" action="{% url 'store:rate_item' item.id %}" method="post">
